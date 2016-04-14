@@ -41,7 +41,9 @@ module WriteMidi : WRITESCORE = struct
                 (0,0, NoteON (map_to_midi (List.hd c), 80))::
                 (*On du contre-chant*)
                 (0,0, NoteON (map_to_midi (List.hd cc),80))::res))
-    in let (myMidi : midi) = (100,((aux cantus cchant)::[])) in
+    in let (myMidi : midi) = (100,((aux cantus cchant [])::[]))
     in (write myMidi name)
-    else raise ListeIncorrecte "Les taille du contre-chant et du cantus firmus ne sont pas les mêmes.";;
+    else raise (ListeIncorrecte ("Les taille du contre-chant et du cantus firmus ne sont pas les mêmes."));;
 end;;
+
+let test = (WriteMidi.ecrire_partition [1;2;3] [2;4;6] "output_test.midi");;
