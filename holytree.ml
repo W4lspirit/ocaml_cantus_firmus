@@ -1,4 +1,13 @@
-module Treestructure = struct
+module type TREESTRUCTURE =
+ sig
+    type holy_tree
+    val init_tree : holy_tree
+    val construire_arbre : int list -> holy_tree
+    val parcours_arbre : holy_tree -> int list
+end;;
+    
+
+module Tree : TREESTRUCTURE = struct
     type noeud = Notes of int * int * holy_tree and
         holy_tree = noeud list;;
 
@@ -98,7 +107,7 @@ module Treestructure = struct
 end;;
 
 
-module M= Treestructure;;
+module M= Tree;;
 
 let v1=M.noeuds_possibles 0 0;;
 let v2=M.noeuds_possibles 4 3;;
