@@ -105,7 +105,7 @@ module Tree : TREESTRUCTURE = struct
     ;;
 end;;
 
-
+(*
 module M= Tree;;
 
 (*test parcours arbre*)
@@ -116,3 +116,4 @@ module M= Tree;;
 let v24 = M.construire_arbre [0;3];;
 let v25 = (List.map print_int
     (M.parcours_arbre v24));;
+*)

@@ -1,11 +1,11 @@
-module ReadMidi = struct
+module ReadMidi : Readscore.READSCORE = struct
     exception NonValidFile
     exception AmbitusWrong of int
     exception ChantPolyphonique
 
-    type midievent = MMidi.midievent
+    type midievent = MIDI.MIDI.midievent
 
-    let map_from_midi = function
+    let map_from_midi c= match c with
         | 62 -> 0
         | 64 -> 1
         | 65 -> 2
@@ -22,18 +22,18 @@ module ReadMidi = struct
 
     let lire_partition (name:string) =
         if (Sys.file_exists name)
-        then let (_,trList) = MMidi.read name in
+        then let (_,trList) = MIDI.MIDI.read name in
         let track = List.hd trList in
-        let rec aux (tr:MMidi.track) (res:int list) (isOn:bool) =
+        let rec aux (tr:MIDI.MIDI.track) (res:int list) (isOn:bool) =
             match tr with 
             |[] -> res
-            |(_,_, NoteOff _)::t ->
+            |(_,_, NoteOFF (note,_))::t ->
                     aux t (note::res) false
-            |(_,_, NoteOn (note,0))::t ->
+            |(_,_, NoteON (note,0))::t ->
                     aux t (note::res) false
-            |(_,_, NoteOn (note,_))::t when isOn ->
+            |(_,_, NoteON (note,_))::t when isOn ->
                     raise ChantPolyphonique
-            |(_,_, NoteOn _)::t -> aux t res true
+            |(_,_, NoteON _)::t -> aux t res true
             |_::t -> aux t res isOn 
         in (List.map map_from_midi (aux track [] false))
         else raise NonValidFile;;

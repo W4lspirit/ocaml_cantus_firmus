@@ -46,4 +46,4 @@ module WriteMidi : WRITESCORE = struct
     else raise (ListeIncorrecte ("Les taille du contre-chant et du cantus firmus ne sont pas les mêmes."));;
 end;;
 
-let test = (WriteMidi.ecrire_partition [1;2;3] [2;4;6] "output_test.midi");;
+
