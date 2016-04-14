@@ -1,0 +1,40 @@
+module ReadMidi = struct
+    exception NonValidFile
+    exception AmbitusWrong of int
+    exception ChantPolyphonique
+
+    type midievent = MMidi.midievent
+
+    let map_from_midi = function
+        | 62 -> 0
+        | 64 -> 1
+        | 65 -> 2
+        | 67 -> 3
+        | 69 -> 4
+        | 71 -> 5
+        | 72 -> 6
+        | 74 -> 7
+        | 76 -> 8
+        | 77 -> 9
+        | 79 -> 10
+        | 81 -> 11
+        | _ -> raise (AmbitusWrong c)
+
+    let lire_partition (name:string) =
+        if (Sys.file_exists name)
+        then let midi = MMidi.read name in
+        let track = List.hd midi in
+        let rec aux (tr:MMidi.track) (res:int list) (isOn:bool) =
+            match tr with 
+            |[] -> res
+            |(_,_, NoteOff _)::t ->
+                    aux t (note::res) false
+            |(_,_, NoteOn (note,0))::t ->
+                    aux t (note::res) false
+            |(_,_, NoteOn (note,_))::t when isOn ->
+                    raise ChantPolyphonique
+            |(_,_, NoteOn _)::t -> aux t res true
+            |_::t -> aux t res isOn 
+        in (List.map map_from_midi (aux track [] false))
+        else raise NonValidFile;;
+end;;

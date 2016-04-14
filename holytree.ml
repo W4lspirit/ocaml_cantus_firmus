@@ -78,7 +78,17 @@ module Treestructure = struct
       | []->[] 
     ;;
     
-    let parcours_arbre (a:holy_tree) = [0];;
+    let parcours_arbre (a:holy_tree) = 
+        let rec aux (l : holy_tree) (res : int list) =
+            let Notes (_,_,level) = (List.hd l) in
+            let size = List.length level in
+            match size with
+            |0 -> res
+            |_ -> let Notes(note,_,next) = List.nth level (Random.int size) in
+                aux next (note::res) in
+        aux a [];;
+
+
     (*Construit un holy_tree elague*)
     let construire_arbre (l : int list) =
       let arbre_complet= construire_arbre_complet l in 
@@ -134,3 +144,21 @@ let v22 = [M.Notes (0, 0,
      M.Notes (7, 0,[M.Notes (5, 3, []); M.Notes (7, 3, []); M.Notes (8, 3, []);M.Notes (10, 3, [])])])]
 let v23 = M.profondeur_holy_tree v22;;
 let v24 = M.holy_purge v23 1 v22 true;;
+
+
+(*test parcours arbre*)
+(*J'ai toujours le pb de module moi, je sais pas pourquoi
+ * du coup, je peux pas tester...
+ * Normalement, c'est sensé donner un output parmi
+ * 045 047 048 055 057 058 0510 075 077 078 0710
+ * Je vais supposer que ça marche... 
+ * Pour le foncteur, je ne me souviens plus exactement comment on fait,
+ * et il faut qu'on parle des champs à la con, donc j'avance sur la suite *)
+let v25 = (List.map print_int
+            (M.parcours_arbre [M.Notes (0,0,
+                [M.Notes (4,0,
+                    [M.Notes (5,3,[]);M.Notes (7,3,[]);M.Notes (8,3,[])]);
+                 M.Notes (5,0,
+                    [M.Notes (5,3,[]);M.Notes (7,3,[]);M.Notes (8,3,[]);M.Notes (10,3,[])]);
+                M.Notes (7,0,
+                    [M.Notes (5,3,[]);M.Notes (7,3,[]);M.Notes (8,3,[]);M.Notes (10,3,[])])])]));;
