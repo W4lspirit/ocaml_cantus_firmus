@@ -22,8 +22,8 @@ module ReadMidi = struct
 
     let lire_partition (name:string) =
         if (Sys.file_exists name)
-        then let midi = MMidi.read name in
-        let track = List.hd midi in
+        then let (_,trList) = MMidi.read name in
+        let track = List.hd trList in
         let rec aux (tr:MMidi.track) (res:int list) (isOn:bool) =
             match tr with 
             |[] -> res
