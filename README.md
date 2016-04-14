@@ -1,3 +1,3 @@
 # ocaml_cantus_firmus
 # ocamlc str.cma MIDI.ml writemidi.ml readscore.ml readmidi.ml holytree.ml FCantusFirmus.ml 
-# ./a.out  or ocamlrun a.out
+# ./a.out 
