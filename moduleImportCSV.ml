@@ -40,4 +40,4 @@ module Readscore : READSCORE =
 
     end;;
 
-READSCORE.lire_partition "test.csv"
+(*let testFct = (List.map print_int (Readscore.lire_partition "test.csv"));;*)

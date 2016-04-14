@@ -88,15 +88,14 @@ module Tree : TREESTRUCTURE = struct
     ;;
     
     let parcours_arbre (a:holy_tree) = 
-        let rec aux (l : holy_tree) (res : int list) =
-            let Notes (_,_,level) = (List.hd l) in
-            let size = List.length level in
-            match size with
-            |0 -> res
-            |_ -> let Notes(note,_,next) = List.nth level (Random.int size) in
-                aux next (note::res) in
-        aux a [];;
-
+        Random.self_init ();
+        let rec aux (ht:holy_tree) (res:int list) =
+            let size = (List.length ht) in
+            let ith_node = (List.nth ht (Random.int size)) in
+            match ith_node with
+            |Notes (cc,_,[]) -> (List.rev (cc::res))
+            |Notes (cc,_,htnext) -> (aux htnext (cc::res))
+        in aux a [];;
 
     (*Construit un holy_tree elague*)
     let construire_arbre (l : int list) =
@@ -109,65 +108,11 @@ end;;
 
 module M= Tree;;
 
-let v1=M.noeuds_possibles 0 0;;
-let v2=M.noeuds_possibles 4 3;;
-let v3=M.noeuds_possibles 5 3;;
-let v4=M.noeuds_possibles 7 3;;
-let v5=M.Notes (0,0,[]);;
-
-let v6=M.ajoute 0 v5;;
-let v8=M.construire_arbre [0];;
-let v7=M.construire_arbre [0;3];;
-let v9=M.construire_arbre [0;3;5];;
-
-let v10=M.max_list [0;3;5];;
-let v11=M.profondeur_noeud v5;;
-let v12 =M.profondeur_holy_tree v8;;
-let v13 =M.profondeur_holy_tree v7;;
-
-let valid=true;;
-
-let v14=M.holy_purge v12 1 v8 valid;;
-let v15=M.holy_purge v13 1 v7 valid;;
-
-(*test purge fin list*)
-let v16 = [M.Notes (0, 0,
-    [M.Notes (4, 0,[M.Notes (5, 3, []); M.Notes (7, 3, []); M.Notes (8, 3, [])]);
-     M.Notes (5, 0,[M.Notes (5, 3, []); M.Notes (7, 3, []); M.Notes (8, 3, []); M.Notes (10, 3, [])]);
-     M.Notes (7, 0,[])])];;
-let v17 = M.profondeur_holy_tree v16;;
-let v18 = M.holy_purge v17 1 v16 true;;
-
-(*test purge debut list*)
-let v19 = [M.Notes (0, 0,
-    [M.Notes (4, 0,[]);
-     M.Notes (5, 0,[M.Notes (5, 3, []); M.Notes (7, 3, []); M.Notes (8, 3, []);M.Notes (10, 3, [])]);
-     M.Notes (7, 0,[M.Notes (5, 3, []); M.Notes (7, 3, []); M.Notes (8, 3, []);M.Notes (10, 3, [])])])]
-let v20 = M.profondeur_holy_tree v19;;
-let v21 = M.holy_purge v20 1 v19 true;;
-
-(*test purge milieu list*)
-let v22 = [M.Notes (0, 0,
-    [M.Notes (4, 0,[M.Notes (5, 3, []); M.Notes (7, 3, []); M.Notes (8, 3, [])]);
-     M.Notes (5, 0,[]);
-     M.Notes (7, 0,[M.Notes (5, 3, []); M.Notes (7, 3, []); M.Notes (8, 3, []);M.Notes (10, 3, [])])])]
-let v23 = M.profondeur_holy_tree v22;;
-let v24 = M.holy_purge v23 1 v22 true;;
-
-
 (*test parcours arbre*)
-(*J'ai toujours le pb de module moi, je sais pas pourquoi
- * du coup, je peux pas tester...
+(*
  * Normalement, c'est sensé donner un output parmi
  * 045 047 048 055 057 058 0510 075 077 078 0710
- * Je vais supposer que ça marche... 
- * Pour le foncteur, je ne me souviens plus exactement comment on fait,
- * et il faut qu'on parle des champs à la con, donc j'avance sur la suite *)
+*)
+let v24 = M.construire_arbre [0;3];;
 let v25 = (List.map print_int
-            (M.parcours_arbre [M.Notes (0,0,
-                [M.Notes (4,0,
-                    [M.Notes (5,3,[]);M.Notes (7,3,[]);M.Notes (8,3,[])]);
-                 M.Notes (5,0,
-                    [M.Notes (5,3,[]);M.Notes (7,3,[]);M.Notes (8,3,[]);M.Notes (10,3,[])]);
-                M.Notes (7,0,
-                    [M.Notes (5,3,[]);M.Notes (7,3,[]);M.Notes (8,3,[]);M.Notes (10,3,[])])])]));;
+    (M.parcours_arbre v24));;
